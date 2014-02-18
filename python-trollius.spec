@@ -1,13 +1,8 @@
-# Tests requiring Internet connections are disabled by default
-# pass --with internet to run them (e.g. when doing a local rebuild
-# for sanity checks before committing)
-%bcond_with internet
-
 %global pypiname trollius
 Name:           python-trollius
 Version:        0.1.5
 Release:        1%{?dist}
-Summary:        Trollius is a portage of the Tulip project (asyncio module, PEP 3156) on Python 2
+Summary:        A port of the Tulip asyncio module to Python 2
 
 License:        Apache License 2.0
 URL:            http://bitbucket.org/enovance/trollius/overview
@@ -18,14 +13,22 @@ BuildArch:      noarch
 BuildRequires:  python2-devel
 BuildRequires:  python-setuptools
 
+#  TODO : rhel6 support can't happen until
+#         python-futures makes it into EPEL
+#         https://bugzilla.redhat.com/show_bug.cgi?id=1066211  
 Requires:  python-futures
+
 # required for check
 BuildRequires:  python-tox
 
 %if 0%{?rhel}==6
 # things required just by python2.6 on RHEL
 Requires:  python-orderddict
-# for check
+
+# required for check with python2.6 
+# TODO : python-argparse required by unittest2, until
+#        new unittest2 package with correct deps
+#        https://bugzilla.redhat.com/show_bug.cgi?id=1065824
 BuildRequires:  python-argparse
 BuildRequires:  python-unittest2
 %endif
@@ -45,17 +48,10 @@ Windows, Linux, Mac OS X, FreeBSD and OpenIndiana.
 %install
 %{__python} setup.py install -O1 --skip-build --root %{buildroot}
 
-# if internet connection available, run tests
-%if %{with internet}
 %check
-
-%if 0%{?rhel}==6
-TOXENV=py26 %{__python} setup.py test
-%endif
 
 %if 0%{?fedora}
 TOXENV=py27 %{__python} setup.py test
-%endif
 %endif
  
 %files
