@@ -1,10 +1,11 @@
 %global pypiname trollius
 Name:           python-trollius
 Version:        0.1.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A port of the Tulip asyncio module to Python 2
 
-License:        Apache License 2.0
+Group:          Development/Libraries
+License:        ASL 2.0
 URL:            http://bitbucket.org/enovance/trollius/overview
 Source0:        http://pypi.python.org/packages/source/t/%{pypiname}/%{pypiname}-%{version}.tar.gz
 #md5=8186f3b1685f79a36c208363fab740f4
@@ -55,12 +56,13 @@ TOXENV=py27 %{__python} setup.py test
 %endif
  
 %files
+%defattr(-,root,root,-)
 %doc README
 %{python_sitelib}/asyncio
 %{python_sitelib}/%{pypiname}-%{version}-py2.?.egg-info
 
 
 %changelog
-* Tue Feb 18 2014  <iwienand@redhat.com> - 0.1.5-1
+* Tue Feb 20 2014  <iwienand@redhat.com> - 0.1.5-2
 - Initial release
 
